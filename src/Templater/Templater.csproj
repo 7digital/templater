@@ -53,6 +53,7 @@
     <Compile Include="SettingsReader.cs" />
     <Compile Include="SettingsReplacer.cs" />
     <Compile Include="SettingsWriter.cs" />
+    <Compile Include="File.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

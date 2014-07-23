@@ -22,9 +22,9 @@ namespace Templater.Tests
 		[Test]
 		public void It_throws_an_exception_if_there_is_not_a_settings_file()
 		{
-			_files.Stub(x => x.Exists(@"C:\doesnotexist.settings.json")).Return(false);
+			_files.Stub(x => x.Exists("doesnotexist.settings.json")).Return(false);
 
-			Assert.Throws<FileNotFoundException>(() => _reader.Read(@"C:\doesnotexist.template.config"));
+			Assert.Throws<FileNotFoundException>(() => _reader.Read("doesnotexist.settings.json"));
 		}
 
 		[Test]
@@ -34,7 +34,7 @@ namespace Templater.Tests
 			_files.Stub(x => x.ReadAllText(Arg<string>.Is.Anything))
 				.Return("{\"environments\":[{\"name\":\"uat\",\"values\":{\"debug\":\"false\",\"stacktrace\":\"false\"");
 
-			Assert.Throws<JsonSerializationException>(() => _reader.Read(@"C:\invalid.template.config"));
+			Assert.Throws<JsonSerializationException>(() => _reader.Read("settings.json"));
 		}
 
 		[Test]
@@ -44,7 +44,7 @@ namespace Templater.Tests
 			_files.Stub(x => x.ReadAllText(Arg<string>.Is.Anything))
 				.Return("{\"environments\":[{\"name\":\"uat\",\"values\":{\"debug\":\"false\",\"stacktrace\":\"false\"}}]}");
 
-			var settings = _reader.Read(@"C:\valid.template.config");
+			var settings = _reader.Read("settings.json");
 
 			Assert.That(settings.Environments.Count, Is.EqualTo(1));
 			Assert.That(settings.Environments[0].Name, Is.EqualTo("uat"));
@@ -60,7 +60,7 @@ namespace Templater.Tests
 			_files.Stub(x => x.ReadAllText(Arg<string>.Is.Anything))
 				.Return("{\"environments\":[{\"name\":\"uat\",\"values\":{\"debug\":\"\",\"stacktrace\":\"\"}}]}");
 
-			var settings = _reader.Read(@"C:\valid.template.config");
+			var settings = _reader.Read("settings.json");
 
 			Assert.That(settings.Environments[0].Values.Count, Is.EqualTo(2));
 			Assert.That(settings.Environments[0].Values.First().Key, Is.EqualTo("debug"));

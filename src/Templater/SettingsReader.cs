@@ -15,10 +15,6 @@ namespace Templater
 
 		public Settings Read(string path)
 		{
-			path = path.ToLower();
-			path = path.Replace(".template", ".settings");
-			path = path.Replace(Path.GetExtension(path), ".json");
-
 			if(!_files.Exists(path))
 				throw new FileNotFoundException("Settings file not found - " + path);
 

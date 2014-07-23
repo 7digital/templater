@@ -16,17 +16,17 @@ namespace Templater
 	{
 		public bool Exists(string path)
 		{
-			return File.Exists(path);
+			return System.IO.File.Exists(path);
 		}
 
 		public string ReadAllText(string path)
 		{
-			return File.ReadAllText(path);
+			return System.IO.File.ReadAllText(path);
 		}
 
 		public void WriteAllText(string path, string contents)
 		{
-			File.WriteAllText(path, contents);
+			System.IO.File.WriteAllText(path, contents);
 		}
 
 		public List<string> Find(string root, string pattern="*.template.*")
