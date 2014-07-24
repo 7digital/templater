@@ -66,6 +66,15 @@ namespace Templater.Tests
 		}
 
 		[Test]
+		public void It_tracks_unused_keys()
+		{
+			var settings = new Environment { Values = new Dictionary<string, string> { { "SomeKey", "foo" }, { "another", "bar" } } };
+			_replacer.Replace("Example [%SomeKey%]", null, settings);
+			Assert.That(_replacer.UnusedKeys.Count, Is.EqualTo(1));
+			Assert.That(_replacer.UnusedKeys.First(), Is.EqualTo("another"));
+		}
+
+		[Test]
 		public void It_throws_an_exception_if_there_are_still_remaining_tokens()
 		{
 			try

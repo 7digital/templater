@@ -37,9 +37,12 @@ namespace Templater
 					var settings = reader.Read(file.SettingsPath);
 					writer.Write(file.TemplatePath, globals, settings);
 				}
+
+				_log.Info("\n\n### SUCCESS ###");
 			}
 			catch (Exception e)
 			{
+				_log.Error("\n\n###  FAILURE ###");
 				_log.Error(e);
 			}
 		}
