@@ -9,7 +9,7 @@ namespace Templater
 	{
 		private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		private static void Main(string[] args)
+		private static int Main(string[] args)
 		{
 			try
 			{
@@ -18,7 +18,7 @@ namespace Templater
 				var options = new Options();
 
 				if (!Parser.Default.ParseArguments(args, options))
-					return;
+					return 0;
 
 				var fileWrapper = new FileWrapper();
 				var reader = new SettingsReader(fileWrapper);
@@ -39,11 +39,14 @@ namespace Templater
 				}
 
 				_log.Info("\n\n### SUCCESS ###");
+				return 0;
 			}
 			catch (Exception e)
 			{
 				_log.Error("\n\n###  FAILURE ###");
 				_log.Error(e);
+
+				return 1;
 			}
 		}
 	}
