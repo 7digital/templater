@@ -1,14 +1,20 @@
 ﻿using System;
 using CommandLine;
+using log4net;
+using log4net.Config;
 
 namespace Templater
 {
 	public class App
 	{
+		private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static void Main(string[] args)
 		{
 			try
 			{
+				XmlConfigurator.Configure();
+
 				var options = new Options();
 
 				if (!Parser.Default.ParseArguments(args, options))
@@ -26,7 +32,7 @@ namespace Templater
 
 				foreach (var file in files)
 				{
-					Console.WriteLine("Processing - " + file.TemplatePath);
+					_log.InfoFormat("Processing - {0}", file.TemplatePath);
 
 					var settings = reader.Read(file.SettingsPath);
 					writer.Write(file.TemplatePath, globals, settings);
@@ -34,7 +40,7 @@ namespace Templater
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("FAILED - " + e.Message);
+				_log.Error(e);
 			}
 		}
 	}

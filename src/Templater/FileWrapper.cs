@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using log4net;
 
 namespace Templater
 {
@@ -15,6 +15,8 @@ namespace Templater
 
 	public class FileWrapper : IFileWrapper
 	{
+		private readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public bool Exists(string path)
 		{
 			return System.IO.File.Exists(path);
@@ -37,12 +39,8 @@ namespace Templater
 
 			var files =  Directory.GetFiles(root, pattern, SearchOption.AllDirectories).ToList();
 
-			Console.WriteLine("Found files:");
-			foreach (var file in files)
-			{
-				Console.WriteLine(file);
-			}
-			Console.WriteLine();
+			_log.Info("Found files:");
+			foreach (var file in files) { _log.Info(file); }
 
 			return files.Select(x => new File(x));
 		}
