@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Templater.Tests
@@ -39,7 +40,7 @@ namespace Templater.Tests
 			var finder = new FileWrapper();
 			var files = finder.Find(path);
 
-			Assert.That(files.Count, Is.EqualTo(6));
+			Assert.That(files.Count(), Is.EqualTo(6));
 		}
     }
 }

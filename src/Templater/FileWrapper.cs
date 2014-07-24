@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -9,7 +10,7 @@ namespace Templater
 		bool Exists(string path);
 		string ReadAllText(string path);
 		void WriteAllText(string path, string contents);
-		List<string> Find(string root, string pattern);
+		IEnumerable<File> Find(string root, string pattern);
 	}
 
 	public class FileWrapper : IFileWrapper
@@ -29,12 +30,21 @@ namespace Templater
 			System.IO.File.WriteAllText(path, contents);
 		}
 
-		public List<string> Find(string root, string pattern="*.template.*")
+		public IEnumerable<File> Find(string root, string pattern="*.template.*")
 		{
 			if (!Directory.Exists(root))
 				throw new DirectoryNotFoundException(root);
 
-			return Directory.GetFiles(root, pattern, SearchOption.AllDirectories).ToList();
+			var files =  Directory.GetFiles(root, pattern, SearchOption.AllDirectories).ToList();
+
+			Console.WriteLine("Found files:");
+			foreach (var file in files)
+			{
+				Console.WriteLine(file);
+			}
+			Console.WriteLine();
+
+			return files.Select(x => new File(x));
 		}
 	}
 }

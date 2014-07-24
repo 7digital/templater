@@ -18,28 +18,50 @@ namespace Templater.Tests
 		[Test]
 		public void It_replaces_environment_name()
 		{
-			var output = _replacer.Replace("Example [%Environment%]", new Environment {Name = "uat"});
+			var settings = new Environment {Name = "uat"};
+			var output = _replacer.Replace("Example [%Environment%]", null, settings);
 			Assert.That(output, Is.EqualTo("Example uat"));
 		}
 
 		[Test]
 		public void It_replaces_values()
 		{
-			var output = _replacer.Replace("Example [%SomeKey%] [%Another%]", new Environment { Values = new Dictionary<string, string> { { "SomeKey", "foo" }, { "another", "bar" } } });
+			var settings = new Environment {Values = new Dictionary<string, string> {{"SomeKey", "foo"}, {"another", "bar"}}};
+			var output = _replacer.Replace("Example [%SomeKey%] [%Another%]", null, settings);
 			Assert.That(output, Is.EqualTo("Example foo bar"));
+		}
+
+		[Test]
+		public void It_replaces_local_values_before_global_values()
+		{
+			var settings = new Environment { Values = new Dictionary<string, string> { { "SomeKey", "foo" } } };
+			var globals = new Environment { Values = new Dictionary<string, string> { { "SomeKey", "bar" } } };
+
+			var output = _replacer.Replace("Example [%SomeKey%]", globals, settings);
+			Assert.That(output, Is.EqualTo("Example foo"));
+		}
+
+		[Test]
+		public void It_replaces_global_values()
+		{
+			var globals = new Environment { Values = new Dictionary<string, string> { { "SomeKey", "foo" }, { "another", "bar" } } };
+			var output = _replacer.Replace("Example [%SomeKey%] [%Another%]", globals, new Environment());
+			Assert.That(output, Is.EqualTo("Example foo bar"));	
 		}
 
 		[Test]
 		public void It_is_case_insensitive_for_keys()
 		{
-			var output = _replacer.Replace("Example [%SomeKey%] [%Another%]", new Environment { Values = new Dictionary<string, string> { { "somekey", "foo" }, {"another", "bar"} } });
+			var settings = new Environment {Values = new Dictionary<string, string> {{"somekey", "foo"}, {"another", "bar"}}};
+			var output = _replacer.Replace("Example [%SomeKey%] [%Another%]", null, settings);
 			Assert.That(output, Is.EqualTo("Example foo bar"));			
 		}
 
 		[Test]
 		public void It_replaces_emtpy_values()
 		{
-			var output = _replacer.Replace("Example [%SomeKey%]", new Environment { Values = new Dictionary<string, string> { { "somekey", "" } } });
+			var settings = new Environment {Values = new Dictionary<string, string> {{"somekey", ""}}};
+			var output = _replacer.Replace("Example [%SomeKey%]", null, settings);
 			Assert.That(output, Is.EqualTo("Example "));
 		}
 
@@ -48,9 +70,9 @@ namespace Templater.Tests
 		{
 			try
 			{
-				_replacer.Replace("Example [%SomeKey%] and [%Another%] [%Another%]", new Environment { Name = "local" });
+				_replacer.Replace("Example [%SomeKey%] and [%Another%] [%Another%]", null, new Environment { Name = "local" });
 			}
-			catch (SettingsMissingException e)
+			catch (SettingsTokensNotReplacedException e)
 			{
 				Assert.That(e.Environment, Is.EqualTo("local"));
 				Assert.That(e.Keys.Count(), Is.EqualTo(2));

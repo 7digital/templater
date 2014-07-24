@@ -3,22 +3,30 @@ using System.Text.RegularExpressions;
 
 namespace Templater
 {
-	public class SettingsReplacer
+	public interface ISettingsReplacer
 	{
-		public string Replace(string input, Environment environment)
+		string Replace(string input, Environment globals, Environment environment);
+	}
+
+	public class SettingsReplacer : ISettingsReplacer
+	{
+		public string Replace(string input, Environment globals, Environment environment)
 		{
-			input = Replace(input, "Environment", environment.Name);
-			input = environment.Values.Aggregate(input, (current, value) => Replace(current, value.Key, value.Value));
+			input = ReplaceKeyWithValue(input, "Environment", environment.Name);
+			input = environment.Values.Aggregate(input, (current, value) => ReplaceKeyWithValue(current, value.Key, value.Value));
+
+			if(globals != null)
+				input = globals.Values.Aggregate(input, (current, value) => ReplaceKeyWithValue(current, value.Key, value.Value));
 
 			var matches = Regex.Matches(input, @"\[\%[\w\d]+\%\]").Cast<Match>();
 
 			if (matches.Any())
-				throw new SettingsMissingException(environment.Name, matches.Select(x => x.Groups[0].ToString()).Distinct());
+				throw new SettingsTokensNotReplacedException(environment.Name, matches.Select(x => x.Groups[0].ToString()).Distinct());
 
 			return input;
 		}
 
-		private string Replace(string text, string key, string value)
+		private string ReplaceKeyWithValue(string text, string key, string value)
 		{
 			if (string.IsNullOrEmpty(key))
 				return text;

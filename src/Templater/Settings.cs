@@ -11,7 +11,7 @@ namespace Templater
 		}
 
 		[JsonProperty("environments")]
-		public List<Environment> Environments { get; set; } 
+		public List<Environment> Environments { get; set; }
 	}
 
 	public class Environment
@@ -28,6 +28,6 @@ namespace Templater
 		public string FileName { get; set; }
 
 		[JsonProperty("values")]
-		public Dictionary<string, string> Values { get; set; } 
+		public IDictionary<string, string> Values { get; set; } 
 	}
 }

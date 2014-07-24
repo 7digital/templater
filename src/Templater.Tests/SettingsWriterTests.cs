@@ -8,10 +8,12 @@ namespace Templater.Tests
 	public class SettingsWriterTests
 	{
 		[Test]
-		public void It_writes_files()
+		public void It_writes_for_each_environment()
 		{
 			var files = MockRepository.GenerateStub<IFileWrapper>();
-			var writer = new SettingsWriter(files);
+			var replacer = MockRepository.GenerateStub<ISettingsReplacer>();
+
+			var writer = new SettingsWriter(files, replacer);
 			var settings = new Settings
 				{
 					Environments = new List<Environment>
@@ -20,14 +22,19 @@ namespace Templater.Tests
 								{
 									Name = "uat",
 									FileName = "web.uat.config",
-								}
+								},
+							new Environment
+								{
+									Name = "prod",
+									FileName = "web.prod.config",
+								},
 						}
 				};
 
-			files.Stub(x => x.ReadAllText(@"C:\web.template.config")).Return(string.Empty);
-			writer.Write(@"C:\web.template.config", settings);
+			writer.Write(@"C:\web.template.config", new Settings(), settings);
 
-			files.AssertWasCalled(x => x.WriteAllText(@"C:\web.uat.config", string.Empty));
+			files.AssertWasCalled(x => x.WriteAllText(@"C:\web.uat.config", null));
+			files.AssertWasCalled(x => x.WriteAllText(@"C:\web.prod.config", null));
 		}
 	}
 }

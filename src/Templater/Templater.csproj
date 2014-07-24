@@ -49,7 +49,7 @@
     <Compile Include="Options.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="SettingsMissingException.cs" />
+    <Compile Include="SettingsTokensNotReplacedException.cs" />
     <Compile Include="SettingsReader.cs" />
     <Compile Include="SettingsReplacer.cs" />
     <Compile Include="SettingsWriter.cs" />
