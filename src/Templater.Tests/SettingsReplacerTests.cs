@@ -96,11 +96,11 @@ namespace Templater.Tests
 		[Test]
 		public void It_checks_env_var_first()
 		{
-			System.Environment.SetEnvironmentVariable("EnvironmentVariableKey", "I am some key");
+			System.Environment.SetEnvironmentVariable("EnvironmentVariableKey_LOCAL", "I am some key");
 
 			var replace = _replacer.Replace("Example [%EnvironmentVariableKey%]", null, new Environment { Name = "local" });
 
-			System.Environment.SetEnvironmentVariable("EnvironmentVariableKey", null);
+			System.Environment.SetEnvironmentVariable("EnvironmentVariableKey_LOCAL", null);
 		}
 	}
 }

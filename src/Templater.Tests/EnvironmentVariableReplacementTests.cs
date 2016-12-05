@@ -14,8 +14,8 @@ namespace Templater.Tests
 		[SetUp]
 		public void Given_enviroment_variables_exist()
 		{
-			System.Environment.SetEnvironmentVariable("SomeKey", "I replaced SomeKey");
-			System.Environment.SetEnvironmentVariable("AnotherKey", "I replaced AnotherKey");
+			System.Environment.SetEnvironmentVariable("SomeKey_LOCAL", "I replaced SomeKey");
+			System.Environment.SetEnvironmentVariable("AnotherKey_LOCAL", "I replaced AnotherKey");
 		}
 
 		[Test]
@@ -32,7 +32,7 @@ namespace Templater.Tests
 		[Test]
 		public void It_can_swap_out_enviroment_variables_based_on_list_of_tokens()
 		{
-			var actual = EnvironmentVariableReplacer.SwapEnvironmentVariables(INPUT_TEXT);
+			var actual = EnvironmentVariableReplacer.SwapEnvironmentVariables(INPUT_TEXT, new Environment() { Name="local" });
 
 			var expected = "Example I replaced SomeKey \r\n" +
 				"Another example I replaced AnotherKey \r\n" +
@@ -45,8 +45,8 @@ namespace Templater.Tests
 		[TearDown]
 		public void Remove_enviroment_variables()
 		{
-			System.Environment.SetEnvironmentVariable("SomeKey", null);
-			System.Environment.SetEnvironmentVariable("AnotherKey", null);
+			System.Environment.SetEnvironmentVariable("SomeKey_LOCAL", null);
+			System.Environment.SetEnvironmentVariable("AnotherKey_LOCAL", null);
 		}
 	}
 }

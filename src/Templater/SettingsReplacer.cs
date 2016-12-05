@@ -21,7 +21,7 @@ namespace Templater
 			globals = globals ?? new Environment();
 			UnusedKeys = new HashSet<string>();
 
-			input = EnvironmentVariableReplacer.SwapEnvironmentVariables(input);
+			input = EnvironmentVariableReplacer.SwapEnvironmentVariables(input, environment);
 
 			foreach (var key in environment.Values.Keys.Where(key => !input.ContainsKey(key)).Where(key => !UnusedKeys.Contains(key.ToLower())))
 				UnusedKeys.Add(key.ToLower());
