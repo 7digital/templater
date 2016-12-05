@@ -3,7 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 
 namespace Templater.Tests
-{
+{ 
 	[TestFixture]
 	public class SettingsReplacerTests
 	{
@@ -91,6 +91,18 @@ namespace Templater.Tests
 			}
 
 			Assert.Fail();
+		}
+
+		[Test]
+		public void It_checks_env_var_first()
+		{
+			System.Environment.SetEnvironmentVariable("EnvironmentVariableKey_LOCAL", "I am some key");
+
+			var replace = _replacer.Replace("Example [%EnvironmentVariableKey%]", null, new Environment { Name = "local" });
+
+			Assert.That(replace, Is.EqualTo("Example I am some key"));
+
+			System.Environment.SetEnvironmentVariable("EnvironmentVariableKey_LOCAL", null);
 		}
 	}
 }
