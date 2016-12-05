@@ -94,13 +94,13 @@ namespace Templater.Tests
 		}
 
 		[Test]
-		[Ignore("Not Implemented Yet")]
 		public void It_checks_env_var_first()
 		{
-			System.Environment.SetEnvironmentVariable("SomeKey", "I am some key");
+			System.Environment.SetEnvironmentVariable("EnvironmentVariableKey", "I am some key");
 
-			var replace = _replacer.Replace("Example [%SomeKey%]", null, new Environment { Name = "local" });
+			var replace = _replacer.Replace("Example [%EnvironmentVariableKey%]", null, new Environment { Name = "local" });
 
+			System.Environment.SetEnvironmentVariable("EnvironmentVariableKey", null);
 		}
 	}
 }

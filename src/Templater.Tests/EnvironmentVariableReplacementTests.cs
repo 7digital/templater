@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using NUnit.Framework;
 
 namespace Templater.Tests
@@ -14,10 +11,17 @@ namespace Templater.Tests
 			"Another example [%AnUnmatchedKey%] \r\n" +
 			"You can't match this [%NoMatch";
 
+		[SetUp]
+		public void Given_enviroment_variables_exist()
+		{
+			System.Environment.SetEnvironmentVariable("SomeKey", "I replaced SomeKey");
+			System.Environment.SetEnvironmentVariable("AnotherKey", "I replaced AnotherKey");
+		}
+
 		[Test]
 		public void It_can_get_list_of_tokens_from_input_text()
 		{
-			var actual = GetTokens(INPUT_TEXT).ToArray();
+			var actual = EnvironmentVariableReplacer.GetTokens(INPUT_TEXT).ToArray();
 
 			Assert.That(actual.Length, Is.EqualTo(3));
 			Assert.That(actual[0], Is.EqualTo("SomeKey"));
@@ -28,10 +32,7 @@ namespace Templater.Tests
 		[Test]
 		public void It_can_swap_out_enviroment_variables_based_on_list_of_tokens()
 		{
-			System.Environment.SetEnvironmentVariable("SomeKey", "I replaced SomeKey");
-			System.Environment.SetEnvironmentVariable("AnotherKey", "I replaced AnotherKey");
-
-			var actual = SwapEnvironmentVariables(INPUT_TEXT);
+			var actual = EnvironmentVariableReplacer.SwapEnvironmentVariables(INPUT_TEXT);
 
 			var expected = "Example I replaced SomeKey \r\n" +
 				"Another example I replaced AnotherKey \r\n" +
@@ -41,25 +42,11 @@ namespace Templater.Tests
 			Assert.That(actual, Is.EqualTo(expected));
 		}
 
-		private object SwapEnvironmentVariables(string input)
+		[TearDown]
+		public void Remove_enviroment_variables()
 		{
-			foreach (var token in GetTokens(input))
-			{
-				var environmentVariable = System.Environment.GetEnvironmentVariable(token);
-				if (!string.IsNullOrEmpty(environmentVariable))
-				{
-					input = input.ReplaceKey(token, environmentVariable);
-				}
-			}
-
-			return input;
-		}
-
-		private IEnumerable<string> GetTokens(string input)
-		{
-			var matches = Regex.Matches(input, @"\[\%(.+?)\%\]")
-				.Cast<Match>();
-			return matches.Select(x=>x.Groups[1].Value);
+			System.Environment.SetEnvironmentVariable("SomeKey", null);
+			System.Environment.SetEnvironmentVariable("AnotherKey", null);
 		}
 	}
 }
