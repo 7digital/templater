@@ -46,6 +46,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnvironmentVariableReplacementTests.cs" />
     <Compile Include="FileTests.cs" />
     <Compile Include="FileWrapperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

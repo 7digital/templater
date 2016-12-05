@@ -3,7 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 
 namespace Templater.Tests
-{
+{ 
 	[TestFixture]
 	public class SettingsReplacerTests
 	{
@@ -91,6 +91,16 @@ namespace Templater.Tests
 			}
 
 			Assert.Fail();
+		}
+
+		[Test]
+		[Ignore("Not Implemented Yet")]
+		public void It_checks_env_var_first()
+		{
+			System.Environment.SetEnvironmentVariable("SomeKey", "I am some key");
+
+			var replace = _replacer.Replace("Example [%SomeKey%]", null, new Environment { Name = "local" });
+
 		}
 	}
 }
