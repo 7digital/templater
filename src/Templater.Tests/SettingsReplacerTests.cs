@@ -100,6 +100,8 @@ namespace Templater.Tests
 
 			var replace = _replacer.Replace("Example [%EnvironmentVariableKey%]", null, new Environment { Name = "local" });
 
+			Assert.That(replace, Is.EqualTo("Example I am some key"));
+
 			System.Environment.SetEnvironmentVariable("EnvironmentVariableKey_LOCAL", null);
 		}
 	}
