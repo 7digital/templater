@@ -7,14 +7,18 @@ namespace Templater
 {
 	public static class EnvironmentVariableReplacer
 	{
+		private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public static string SwapEnvironmentVariables(string input, Environment environment)
 		{
 			foreach (var token in GetTokens(input))
 			{
-				var environmentVariable = System.Environment.GetEnvironmentVariable(FormEnvVarKey(token, environment));
+				var environmentVariableKey = FormEnvVarKey(token, environment);
+				var environmentVariable = System.Environment.GetEnvironmentVariable(environmentVariableKey);
 				if (!string.IsNullOrEmpty(environmentVariable))
 				{
 					input = input.ReplaceKey(token, environmentVariable);
+					_log.InfoFormat("Replacing setting from env variable - [%{0}%] - {1}", token, environmentVariableKey);
 				}
 			}
 
