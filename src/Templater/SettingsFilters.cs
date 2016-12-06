@@ -6,7 +6,7 @@ namespace Templater
 	{
 		public static Settings ApplySpecificEnvironmentFilter(this Settings settings, string environment)
 		{
-			if (environment.ToLower() != "all")
+			if (environment != null && environment.ToLower() != "all")
 			{
 				var chosenSetting = settings.Environments.FindAll(x => x.Name == environment.ToLower());
 				if (chosenSetting.Count < 1)

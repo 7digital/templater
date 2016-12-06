@@ -37,6 +37,13 @@ namespace Templater.Tests
 		}
 
 		[Test]
+		public void When_null_should_contain_all_environment()
+		{
+			var filteredSettings = _settings.ApplySpecificEnvironmentFilter(null);
+			Assert.That(filteredSettings.Environments.Count, Is.EqualTo(3));
+		}
+
+		[Test]
 		public void When_invalid_environment_specified_then_throws_error()
 		{
 			var exception = Assert.Throws<Exception>(() => _settings.ApplySpecificEnvironmentFilter("deepspace"));
