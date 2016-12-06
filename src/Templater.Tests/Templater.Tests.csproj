@@ -58,6 +58,7 @@
     <Compile Include="SettingsReaderTests.cs" />
     <Compile Include="SettingsReplacerTests.cs" />
     <Compile Include="SettingsWriterTests.cs" />
+    <Compile Include="SpecificEnvironmentFilterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
