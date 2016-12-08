@@ -34,7 +34,10 @@ namespace Templater
 				{
 					_log.InfoFormat("Processing - {0}", file.TemplatePath);
 
-					var settings = reader.Read(file.SettingsPath);
+					var settings = reader
+						.Read(file.SettingsPath)
+						.ApplySpecificEnvironmentFilter(options.RunEnvironment);
+
 					writer.Write(file.TemplatePath, globals, settings);
 				}
 
